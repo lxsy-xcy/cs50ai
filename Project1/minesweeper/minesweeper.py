@@ -222,12 +222,8 @@ class MinesweeperAI():
         ChangeFlag = False
         cnt = 1
         while True:
-            print(f"cnt:{cnt}")
-            cnt+=1
-            # find all inferenced safe or mine
-            #print("big loop")
+            # find all inferenced safe or mine and mark
             for knowledge in self.knowledge:
-                #print("loop1")
 
                 safe = knowledge.known_safes()
                 mine = knowledge.known_mines()
@@ -238,45 +234,29 @@ class MinesweeperAI():
                     self.mines=mine|self.mines
 
             # mark all of the knowledge from new safe and mine
-            for knowledge in self.knowledge:
-                #print("loop2")
-                for safe in self.safes:
-                    if(knowledge.mark_safe(safe)):
-                        ChangeFlag = True
-                    #print("loop3")
-                for mine in self.mines:
-                    if(knowledge.mark_mine(mine)):
-                        ChangeFlag=True
-                    #print("loop4")
+            for safe in self.safes:
+                self.mark_safe(safe)
+            for mine in self.mines:
+                self.mark_mine(mine)
         
             # remove the empty knowledge
             rm_list=[]
 
-            print("before:")
-            for knowledge in self.knowledge:
-                print(knowledge)
-
             for knowledge in self.knowledge:
                 if knowledge.cells == set():
                     rm_list.append(knowledge)
-            print(f"rm_list{rm_list}")
             self.knowledge = list(filter(lambda x:x not in rm_list,self.knowledge))
             
-            print("after:")
-            for knowledge in self.knowledge:
-                print(knowledge)
         
             # subset create new knowledge
             new_list = []
             while True:
-                #print("loop6")
                 for theknowledge in self.knowledge:
                     for knowledge_sub in self.knowledge:
                         if theknowledge.is_subset(knowledge_sub):
                             new_know = Sentence(theknowledge.cells-knowledge_sub.cells,theknowledge.count-knowledge_sub.count)
                             if new_know not in self.knowledge:
                                 new_list.append(new_know)
-                                print(f"new_know:{new_know}")
                                 print(new_know in self.knowledge)
                                 ChangeFlag=True
 
@@ -289,7 +269,6 @@ class MinesweeperAI():
                 break
             ChangeFlag=False
             
-
     def make_safe_move(self):
         """
         Returns a safe cell to choose on the Minesweeper board.
