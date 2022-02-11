@@ -20,7 +20,7 @@ knowledge0 = And(
 # A says "We are both knaves."
 # B says nothing.
 knowledge1 = And(
-    Or(And(AKnave,AKnight,BKnave),And(AKnave,Not(And(AKnight,BKnave)))),
+    Or(And(AKnave,AKnight,BKnave),And(AKnave,Not(And(AKnave,BKnave)))),
     Not(Biconditional(AKnave,AKnight)),
     Not(Biconditional(BKnave,BKnight))
 )
@@ -42,9 +42,9 @@ knowledge2 = And(
 # C says "A is a knight."
 knowledge3 = And(
     #B is Knight
-    Or(And(BKnight,CKnave,Or(AKnight,AKnave)),
+    Or(And(BKnight,CKnave,Or(And(AKnight,AKnave),And(AKnave,Not(AKnave)))),
     #B is not Knight
-    And(BKnave,Not(CKnave),Or(And(AKnight,AKnave),And(AKnave,Not(AKnave))))),
+    And(BKnave,Not(CKnave),Or(AKnight,AKnave))),
     Not(Biconditional(Or(AKnight,AKnave),Or(And(AKnight,AKnave),And(AKnave,Not(AKnave))))),
     Or(And(CKnight,AKnight),And(CKnave,Not(AKnight))),
     Not(Biconditional(AKnave,AKnight)),
